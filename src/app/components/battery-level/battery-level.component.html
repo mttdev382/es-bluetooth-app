@@ -1,0 +1,11 @@
+<p *ngIf="!isBluetoothSupported">Web Bluetooth API is not supported by this browser.</p>
+
+<button (click)="requestBluetoothDevices()" *ngIf="isBluetoothSupported">Request Bluetooth Devices</button>
+
+<ul *ngIf="devices.length > 0">
+  <li *ngFor="let device of devices">
+    Name: {{ device.name }}<br>
+    ID: {{ device.id }}<br>
+    Battery Level: {{ batteryLevel }}
+  </li>
+</ul>
