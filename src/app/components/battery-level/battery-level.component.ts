@@ -10,7 +10,6 @@ export class BatteryLevelComponent implements OnInit {
   devices: BluetoothDevice[] = [];
   isBluetoothSupported: boolean = false;
   batteryLevel: any;
-  
 
   ngOnInit(): void {
     if ('bluetooth' in navigator) {
