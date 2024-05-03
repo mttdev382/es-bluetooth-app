@@ -1,25 +1,21 @@
-# Usa un'immagine Node.js come base
-FROM node:latest
-
-# Imposta la directory di lavoro all'interno del container
+# Stage di sviluppo
+FROM node as dev-stage
 WORKDIR /app
-
-# Copia il file package.json e package-lock.json nella directory di lavoro
-COPY package*.json .
-
-# Installa le dipendenze del progetto
+COPY package*.json ./
 RUN npm install
-
-RUN npm install -g @angular/cli
-
-# Copia il codice sorgente dell'applicazione nella directory di lavoro
 COPY . .
-
-# Avvia l'applicazione React Native
-# CMD ["npm", "start"]
-
-EXPOSE 4200 
+EXPOSE 4200
 EXPOSE 49153
+CMD ["tail", "-f", "/dev/null"]
 
-# Esegui un comando personalizzato all'avvio del container
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+# Stage di costruzione per la produzione
+FROM node as build-stage
+WORKDIR /app
+COPY --from=dev-stage /app .
+RUN npm run build --prod
+
+# Stage di produzione con Nginx
+FROM nginx:alpine as production-stage
+COPY --from=build-stage /app/dist/angular-app /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
