@@ -16,7 +16,7 @@ RUN npm run build --prod
 
 # Stage di produzione con Nginx
 FROM nginx:alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY --from=build-stage /app/dist/es-bluetooth/browser /usr/share/nginx/html
 
 COPY default.conf /etc/nginx/conf.d/
 
