@@ -16,7 +16,7 @@ RUN npm run build --prod
 
 # Stage di produzione con Nginx
 FROM nginx:alpine as production-stage
-COPY --from=build-stage /app/dist/angular-app /usr/share/nginx/html
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 COPY cert.key /etc/ssl/certs
 COPY cert.crt /etc/ssl/certs
